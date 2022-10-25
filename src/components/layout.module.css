@@ -17,3 +17,9 @@
 .nav-link-text {
     color: black;
 }
+.game-panel {
+    display: inline-block;
+    width: 100px;
+    height: 100px;
+    background-color: aquamarine;
+}

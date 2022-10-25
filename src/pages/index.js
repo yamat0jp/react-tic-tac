@@ -1,12 +1,12 @@
 import * as React from 'react'
-import Layout, { Board } from '../components/layout'
+import Board, { Layout } from '../components/layout'
 
 const IndexPage = () => {
     const s = "Let's play tic-tac-toe."
     return (
       <div>
         <Layout pageTitle="Home Page" children={s}></Layout>
-        <Board></Board>
+        <Board></Board>        
       </div>
     )
 }

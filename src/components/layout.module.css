@@ -19,7 +19,10 @@
 }
 .game-panel {
     display: inline-block;
+    font-size: 80px;
+    color: blue;
     width: 100px;
-    height: 100px;
-    background-color: aquamarine;
+    height: 100px;    
+    margin: 1%;
+    background-color: aquamarine;    
 }

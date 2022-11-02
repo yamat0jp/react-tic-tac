@@ -32,8 +32,7 @@ const Layout = ({ pageTitle, children }) => {
 const Board = () => {
     const [player, setPlayer] = React.useState(1)
     const [members, setMembers] = React.useState([0,0,0, 0,0,0, 0,0,0])
-    const [message, setMessage] = React.useState('start')    
-    let man = player
+    const [message, setMessage] = React.useState('start')        
     function display(index) {              
         switch(members[index]) {                        
             case(1): 
@@ -64,8 +63,8 @@ const Board = () => {
         }           
         return test
     }
-    function move(index) {                  
-        if (player === 0) {
+    function move(pn,index) {                  
+        if (player === 0) {            
             setPlayer(1)
             setMembers([0,0,0, 0,0,0, 0,0,0])
             setMessage('restart')            
@@ -73,27 +72,23 @@ const Board = () => {
         }        
        if (members[index] !== 0)             
             return                
-        var dataCopy = members
-        dataCopy[index] = man
-        setMembers(dataCopy)         
-        if (judge(man)) {                    
-            if (man === 1) 
+        members[index] = pn
+        setMembers(members)
+        if (judge(pn)) {                    
+            if (pn === 1) 
                 setMessage('You win!!')
             else
                 setMessage('Com win.')  
-            setPlayer(0) 
-            return                           
+            setPlayer(0)                                  
         }                
         if (!isEmpty()) {               
             setMessage('Draw.')            
-            setPlayer(0)
-            return
-        }                        
-        console.log(man)        
-        man = next_p(man)                                           
-        if (man === 2)                                 
-            move(ai_move(man,1))                                           
-        return
+            setPlayer(0)            
+        }                                                
+    }
+    function click(index) {
+        move(1,index)        
+        move(2,ai_move(2,1))        
     }
     function next_p(p) {
         if (p === 1)
@@ -104,22 +99,22 @@ const Board = () => {
     function ai_move(local, level) {        
         let min_max, tmp, num;
         if (!isEmpty) return 0
-        if (local === man) 
+        if (local === 2) 
             min_max = -100
         else
-            min_max = 100
+            min_max = 100        
         for (const i in members) {
             if (members[i] === 0)
                 members[i] = local
             else    
                 continue
             if (judge(local)) {
-                if (local === man)                
+                if (local === 2)                
                     tmp = 10 - level
                 else
                     tmp = -(10-level)                
             } else tmp = ai_move(next_p(local),level+1)    
-            if (local === man) {                                 
+            if (local === 2) {                                 
                 if (min_max < tmp) {
                     min_max = tmp   
                     num = i
@@ -137,17 +132,17 @@ const Board = () => {
     }
     return (
         <div className={container}>
-            <button className={gamePanel} onClick={()=>move(0)}>{display(0)}</button> 
-            <button className={gamePanel} onClick={()=>move(1)}>{display(1)}</button> 
-            <button className={gamePanel} onClick={()=>move(2)}>{display(2)}</button> 
+            <button className={gamePanel} onClick={()=>click(0)}>{display(0)}</button> 
+            <button className={gamePanel} onClick={()=>click(1)}>{display(1)}</button> 
+            <button className={gamePanel} onClick={()=>click(2)}>{display(2)}</button> 
             <br />            
-            <button className={gamePanel} onClick={()=>move(3)}>{display(3)}</button> 
-            <button className={gamePanel} onClick={()=>move(4)}>{display(4)}</button> 
-            <button className={gamePanel} onClick={()=>move(5)}>{display(5)}</button> 
+            <button className={gamePanel} onClick={()=>click(3)}>{display(3)}</button> 
+            <button className={gamePanel} onClick={()=>click(4)}>{display(4)}</button> 
+            <button className={gamePanel} onClick={()=>click(5)}>{display(5)}</button> 
             <br />
-            <button className={gamePanel} onClick={()=>move(6)}>{display(6)}</button> 
-            <button className={gamePanel} onClick={()=>move(7)}>{display(7)}</button> 
-            <button className={gamePanel} onClick={()=>move(8)}>{display(8)}</button> 
+            <button className={gamePanel} onClick={()=>click(6)}>{display(6)}</button> 
+            <button className={gamePanel} onClick={()=>click(7)}>{display(7)}</button> 
+            <button className={gamePanel} onClick={()=>click(8)}>{display(8)}</button> 
             <p>{message}</p>
         </div>
     )    

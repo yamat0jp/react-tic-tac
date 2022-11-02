@@ -30,9 +30,9 @@ const Layout = ({ pageTitle, children }) => {
 }
 
 const Board = () => {
-    const [player, setPlayer] = React.useState(1)
-    const [members, setMembers] = React.useState([0,0,0, 0,0,0, 0,0,0])
-    const [message, setMessage] = React.useState('start')        
+    var player = 1
+    var members = [0,0,0, 0,0,0, 0,0,0]    
+    const [message,setMessage] = React.useState('start')        
     function display(index) {              
         switch(members[index]) {                        
             case(1): 
@@ -63,32 +63,39 @@ const Board = () => {
         }           
         return test
     }
-    function move(pn,index) {                  
-        if (player === 0) {            
-            setPlayer(1)
-            setMembers([0,0,0, 0,0,0, 0,0,0])
-            setMessage('restart')            
-            return 
-        }        
-       if (members[index] !== 0)             
-            return                
-        members[index] = pn
-        setMembers(members)
-        if (judge(pn)) {                    
-            if (pn === 1) 
-                setMessage('You win!!')
+    function winner(pn) {
+        let msg;
+        if (judge(pn)) {
+            player = 0
+            if (pn === 1)
+                msg = 'You win!!'
             else
-                setMessage('Com win.')  
-            setPlayer(0)                                  
-        }                
-        if (!isEmpty()) {               
-            setMessage('Draw.')            
-            setPlayer(0)            
-        }                                                
+                msg = 'Com win.'        
+            setMessage(msg)
+            return true
+        }
+        if (!isEmpty()) {
+            player = 0
+            setMessage('Draw.')
+            return true
+        }
+        return false
+    }
+    function move(pn,index) {                              
+        if (player === 0) {            
+            player = 1
+            members = [0,0,0, 0,0,0, 0,0,0]
+            setMessage('restart')                        
+            return true
+        }        
+        if (members[index] !== 0)                                       
+            return false                   
+        members[index] = pn                
+        return !winner(pn)
     }
     function click(index) {
-        move(1,index)        
-        move(2,ai_move(2,1))        
+        if (move(1,index))             
+            move(2,ai_move(2,1))
     }
     function next_p(p) {
         if (p === 1)

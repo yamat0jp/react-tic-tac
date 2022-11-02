@@ -30,8 +30,8 @@ const Layout = ({ pageTitle, children }) => {
 }
 
 const Board = () => {
-    var player = 1
-    var members = [0,0,0, 0,0,0, 0,0,0]    
+    const [player,setPlayer] = React.useState(1)
+    const [members,setMembers] = React.useState([0,0,0, 0,0,0, 0,0,0])    
     const [message,setMessage] = React.useState('start')        
     function display(index) {              
         switch(members[index]) {                        
@@ -64,9 +64,9 @@ const Board = () => {
         return test
     }
     function winner(pn) {
-        let msg;
+        let msg = message;
         if (judge(pn)) {
-            player = 0
+            setPlayer(0)
             if (pn === 1)
                 msg = 'You win!!'
             else
@@ -75,7 +75,7 @@ const Board = () => {
             return true
         }
         if (!isEmpty()) {
-            player = 0
+            setPlayer(0)
             setMessage('Draw.')
             return true
         }
@@ -83,14 +83,15 @@ const Board = () => {
     }
     function move(pn,index) {                              
         if (player === 0) {            
-            player = 1
-            members = [0,0,0, 0,0,0, 0,0,0]
+            setPlayer(1)
+            setMembers([0,0,0, 0,0,0, 0,0,0])
             setMessage('restart')                        
             return true
         }        
         if (members[index] !== 0)                                       
             return false                   
         members[index] = pn                
+        setMembers(members)
         return !winner(pn)
     }
     function click(index) {

@@ -33,6 +33,7 @@ const Board = () => {
     const [player,setPlayer] = React.useState(1)
     const [members,setMembers] = React.useState([0,0,0, 0,0,0, 0,0,0])    
     const [message,setMessage] = React.useState('start')        
+    var dataCopy;
     function display(index) {              
         switch(members[index]) {                        
             case(1): 
@@ -90,13 +91,15 @@ const Board = () => {
         }        
         if (members[index] !== 0)                                       
             return false                   
-        members[index] = pn                
-        setMembers(members)
+        dataCopy[index] = pn                       
         return !winner(pn)
     }
     function click(index) {
-        if (move(1,index))             
-            move(2,ai_move(2,1))
+        dataCopy = [...members]
+        if (move(1,index)) {              
+            move(2,ai_move(2,1))  
+            setMembers(dataCopy)
+        }
     }
     function next_p(p) {
         if (p === 1)
@@ -111,9 +114,9 @@ const Board = () => {
             min_max = -100
         else
             min_max = 100        
-        for (const i in members) {
-            if (members[i] === 0)
-                members[i] = local
+        for (const i in dataCopy) {
+            if (dataCopy[i] === 0)
+                dataCopy[i] = local
             else    
                 continue
             if (judge(local)) {
@@ -131,7 +134,7 @@ const Board = () => {
                 min_max = tmp
                 num = i
             }
-            members[i] = 0
+            dataCopy[i] = 0
         }
         if (level === 1) {               
             return num                        

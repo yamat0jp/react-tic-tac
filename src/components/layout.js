@@ -29,13 +29,9 @@ const Layout = ({ pageTitle, children }) => {
     )
 }
 
-const Board = () => {
-    const [player,setPlayer] = React.useState(1)
-    const [members,setMembers] = React.useState([0,0,0, 0,0,0, 0,0,0])    
-    const [message,setMessage] = React.useState('start')        
-    var dataCopy;
+const Panel = (props) => {
     function display(index) {              
-        switch(members[index]) {                        
+        switch(index) {                        
             case(1): 
                 return 'O'                
             case(2): 
@@ -44,6 +40,16 @@ const Board = () => {
                 return '?'                
         }                        
     }
+    return (
+        <button className={gamePanel} onClick={props.onClick}>{display(props.number)}</button>
+    )
+}
+
+const Board = () => {
+    const [player,setPlayer] = React.useState(1)
+    const [members,setMembers] = React.useState([0,0,0, 0,0,0, 0,0,0])    
+    const [message,setMessage] = React.useState('start')        
+    var dataCopy;
     function check(p,a,b,c) {        
         if (members[a] === p && members[b] === p && members[c] === p) {            
             return true 
@@ -87,7 +93,7 @@ const Board = () => {
             setPlayer(1)
             setMembers([0,0,0, 0,0,0, 0,0,0])
             setMessage('restart')                        
-            return true
+            return false
         }        
         if (members[index] !== 0)                                       
             return false                   
@@ -143,17 +149,17 @@ const Board = () => {
     }
     return (
         <div className={container}>
-            <button className={gamePanel} onClick={()=>click(0)}>{display(0)}</button> 
-            <button className={gamePanel} onClick={()=>click(1)}>{display(1)}</button> 
-            <button className={gamePanel} onClick={()=>click(2)}>{display(2)}</button> 
+            <Panel number={members[0]} onClick={()=>click(0)}></Panel> 
+            <Panel number={members[1]} onClick={()=>click(1)}></Panel> 
+            <Panel number={members[2]} onClick={()=>click(2)}></Panel> 
             <br />            
-            <button className={gamePanel} onClick={()=>click(3)}>{display(3)}</button> 
-            <button className={gamePanel} onClick={()=>click(4)}>{display(4)}</button> 
-            <button className={gamePanel} onClick={()=>click(5)}>{display(5)}</button> 
+            <Panel number={members[3]} onClick={()=>click(3)}></Panel> 
+            <Panel number={members[4]} onClick={()=>click(4)}></Panel> 
+            <Panel number={members[5]} onClick={()=>click(5)}></Panel> 
             <br />
-            <button className={gamePanel} onClick={()=>click(6)}>{display(6)}</button> 
-            <button className={gamePanel} onClick={()=>click(7)}>{display(7)}</button> 
-            <button className={gamePanel} onClick={()=>click(8)}>{display(8)}</button> 
+            <Panel number={members[6]} onClick={()=>click(6)}></Panel> 
+            <Panel number={members[7]} onClick={()=>click(7)}></Panel> 
+            <Panel number={members[8]} onClick={()=>click(8)}></Panel> 
             <p>{message}</p>
         </div>
     )    

@@ -48,8 +48,8 @@ const Panel = (props) => {
 const Board = () => {
     const [player,setPlayer] = React.useState(1)
     const [members,setMembers] = React.useState([0,0,0, 0,0,0, 0,0,0])    
-    const [message,setMessage] = React.useState('start')        
-    var dataCopy;
+    const [message,setMessage] = React.useState('start')            
+    var dataCopy = members;
     function check(p,a,b,c) {        
         if (members[a] === p && members[b] === p && members[c] === p) {            
             return true 
@@ -64,21 +64,19 @@ const Board = () => {
     } 
     function isEmpty() {
         let test = false
-        for (const i in members) {
-            if (members[i] === 0) 
+        for (const i in dataCopy) {
+            if (dataCopy[i] === 0) 
                 test = true
         }           
         return test
     }
-    function winner(pn) {
-        let msg = message;
+    function winner(pn) {        
         if (judge(pn)) {
             setPlayer(0)
             if (pn === 1)
-                msg = 'You win!!'
+                setMessage('You win!!')
             else
-                msg = 'Com win.'        
-            setMessage(msg)
+                setMessage('Com win.')                    
             return true
         }
         if (!isEmpty()) {
@@ -89,31 +87,31 @@ const Board = () => {
         return false
     }
     function move(pn,index) {                              
-        if (player === 0) {            
+        if (player === 0) {                                               
             setPlayer(1)
             setMembers([0,0,0, 0,0,0, 0,0,0])
             setMessage('restart')                        
             return false
         }        
-        if (members[index] !== 0)                                       
+        if (dataCopy[index] !== 0)                                       
             return false                   
-        dataCopy[index] = pn                       
+        dataCopy[index] = pn            
         return !winner(pn)
     }
-    function click(index) {
-        dataCopy = [...members]
+    function click(index) {       
+        dataCopy = members        
         if (move(1,index)) {              
-            move(2,ai_move(2,1))  
-            setMembers(dataCopy)
+            move(2,ai_move(2,1))              
+            setMembers([...dataCopy])        
         }
     }
-    function next_p(p) {
-        if (p === 1)
+    function next_p(pn) {
+        if (pn === 1)
             return 2
         else    
             return 1
     }
-    function ai_move(local, level) {        
+    function ai_move(local,level) {        
         let min_max, tmp, num;
         if (!isEmpty) return 0
         if (local === 2) 
@@ -128,7 +126,7 @@ const Board = () => {
             if (judge(local)) {
                 if (local === 2)                
                     tmp = 10 - level
-                else
+                else 
                     tmp = -(10-level)                
             } else tmp = ai_move(next_p(local),level+1)    
             if (local === 2) {                                 

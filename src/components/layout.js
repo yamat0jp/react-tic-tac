@@ -113,11 +113,11 @@ const Board = () => {
     }
     function ai_move(local,level) {        
         let min_max, tmp, num;
-        if (!isEmpty) return 0
+        if (!isEmpty()) return 0
         if (local === 2) 
-            min_max = -100
+            min_max = -100000
         else
-            min_max = 100        
+            min_max = 100000        
         for (const i in dataCopy) {
             if (dataCopy[i] === 0)
                 dataCopy[i] = local
